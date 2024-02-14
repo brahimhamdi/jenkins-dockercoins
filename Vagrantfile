@@ -43,7 +43,6 @@ Vagrant.configure(2) do |config|
     sudo apt update
     sudo apt install -y tree git 
     sudo apt install -y ansible
-    ssh-keygen -b 4096 -t rsa -f ~/.ssh/id_rsa -q -N ""
 
   SHELL
 
