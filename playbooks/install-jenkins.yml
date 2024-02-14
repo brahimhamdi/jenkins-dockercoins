@@ -15,9 +15,6 @@
       filename: jenkins.list  
       update_cache: yes
 
-  - name: Install fontconfig
-    shell: apt install fontconfig -y    
-
   - name: jre-17
     shell: apt install fontconfig openjdk-17-jre -y  
 

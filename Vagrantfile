@@ -39,13 +39,11 @@ Vagrant.configure(2) do |config|
       end
   end
 
-  config.vm.provision "shell", inline: <<-SHELL
-    sudo apt update
-    sudo apt install -y tree git
-  SHELL
-
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbooks/install-jenkins.yml"
   end
 
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbooks/install-docker.yml"
+  end
 end
