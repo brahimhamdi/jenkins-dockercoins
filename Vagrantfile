@@ -3,19 +3,19 @@ Vagrant.require_version ">= 2.0.0"
 boxes = [
     {
         :name => "jenkins-ansible-control-plane",
-        :eth1 => "192.168.56.100",
+        :eth1 => "192.168.205.100",
         :mem => "4096",
         :cpu => "2"
     },
     {
         :name => "node1",
-        :eth1 => "192.168.56.101",
+        :eth1 => "192.168.205.101",
         :mem => "1024",
         :cpu => "1"
     },
     {
         :name => "node2",
-        :eth1 => "192.168.56.102",
+        :eth1 => "192.168.205.102",
         :mem => "1024",
         :cpu => "1"
     }
@@ -38,6 +38,13 @@ Vagrant.configure(2) do |config|
         config.vm.network :private_network, ip: opts[:eth1]
       end
   end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt update
+    sudo apt install -y tree git 
+    sudo apt install -y ansible
+
+  SHELL
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbooks/install-jenkins.yml"

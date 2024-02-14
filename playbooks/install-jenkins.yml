@@ -3,25 +3,13 @@
   become: yes
 
   tasks:
-  - name: Jenkins key
-    get_url:
-      url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-      dest: /usr/share/keyrings/jenkins-keyring.asc
-
-  - name: Jenkins repo
-    apt_repository:
-      repo: deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/
-      state: present
-      filename: jenkins.list  
-      update_cache: yes
-
-  - name: jre-17
-    shell: apt install fontconfig openjdk-17-jre -y  
-
-  - name: Install Jenkins
-    apt:
-      name: jenkins
-      state: present  
+  - name: Install jdk 17 + Jenkins
+    shell: |
+      sudo apt install openjdk-17-jdk
+      sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+      echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+      sudo apt update
+      sudo apt install -y jenkins
 
   - name: service jenkins
     systemd:

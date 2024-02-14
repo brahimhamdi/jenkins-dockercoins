@@ -26,8 +26,9 @@
         name: docker-ce
         state: present
       notify: start docker
-    - name: add vagrant user to docker group
-      command: usemod -aG docker vagrant
+
+    - name: add jenkins user to docker group
+      command: usermod -aG docker jenkins
 
   handlers:
     - name: start docker
