@@ -1,0 +1,63 @@
+pipeline {
+  environment {
+    workerImg = "brahimhamdi/worker"
+    hasherImg = "brahimhamdi/hasher"
+    rngImg = "brahimhamdi/rng"
+    webuiImg = "brahimhamdi/webui"
+    registryCredential = 'dockerhub' //à configurer : ajouter les paramètres de connexion à votre compte DockerHub
+    img = ''
+  }
+  
+  agent any
+  
+  stages {
+  
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/brahimhamdi/jenkins-dockercoins.git'
+      }
+    }
+  
+    stage('Build Docker Image') {
+      steps{
+        script {
+        img = docker.build(workerImg + ":$BUILD_NUMBER","worker")
+            }
+        }
+    }
+
+    stage('Test Docker Image') {
+      steps{
+        sh "docker run -d --rm --name worker $workerImg:$BUILD_NUMBER"
+        sh 'sleep 30'
+        sh 'docker stop worker'
+
+        }
+      }
+
+    stage('Image push') {
+      steps{
+        script {
+      //install gnupg2 et  pass avant (sudo apt install gnupg2 pass)
+          docker.withRegistry( '', registryCredential ) {
+            img.push()
+                }
+            }
+        }
+    }
+
+    stage('Create k8s cluster') {
+      steps{
+            sh 'ansible-playbook playbooks/kube-dependencies.yml'
+            sh 'ansible-playbook playbooks/master.yml'
+            sh 'ansible-playbook playbooks/worker.yml'
+          }
+        }
+    
+    stage('Deploy to k8s') {
+      steps{
+            sh 'ansible-playbook playbooks/dockercoins-deploy.yml'
+          }
+        }
+    }
+}

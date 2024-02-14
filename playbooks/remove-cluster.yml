@@ -1,0 +1,13 @@
+- hosts: workers
+  become: yes
+  tasks:
+  - name: leave workers
+    command: kubeadm reset -f
+- hosts: control
+  become: yes
+  tasks:
+  - name: remove cluster
+    command: kubeadm reset -f
+  - name: remove configs
+    command: rm -rf /etc/kubernetes/ /var/lib/kubelet/ /var/lib/etcd/
+

@@ -1,0 +1,43 @@
+- name: Install jenkins
+  hosts: jenkins-ansible-control-plane
+  become: yes
+
+  tasks:
+  - name: Jenkins key
+    get_url:
+      url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+      dest: /usr/share/keyrings/jenkins-keyring.asc
+
+  - name: Jenkins repo
+    apt_repository:
+      repo: deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/
+      state: present
+      filename: jenkins.list  
+      update_cache: yes
+
+  - name: Install fontconfig
+    shell: apt install fontconfig -y    
+
+  - name: jre-17
+    shell: apt install fontconfig openjdk-17-jre -y  
+
+  - name: Install Jenkins
+    apt:
+      name: jenkins
+      state: present  
+
+  - name: service jenkins
+    systemd:
+      state: started
+      name: jenkins
+      enabled: yes
+
+  - name: Installer des packages gnupg2 & pass
+    apt:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+      - gnupg2
+      - pass
+

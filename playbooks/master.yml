@@ -1,0 +1,29 @@
+- hosts: control
+  become: yes
+  tasks:
+    - name: initialize the cluster (this could take some time)
+      command: kubeadm init --apiserver-advertise-address="{{ hostvars['ansible']['ansible_eth1']['ipv4']['address'] }}" --pod-network-cidr=10.244.0.0/16
+
+    - name: create .kube directory
+      become: yes
+      become_user: vagrant
+      file:
+        path: $HOME/.kube
+        state: directory
+        mode: 0755
+
+    - name: copy admin.conf to user's kube config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/vagrant/.kube/config
+        remote_src: yes
+        owner: vagrant
+
+    - name: install Pod network
+      become: yes
+      become_user: vagrant
+      shell: kubectl apply -f files/kube-flannel.yml >> pod_network_setup.log
+      args:
+        chdir: $HOME
+        creates: pod_network_setup.log
+ 
