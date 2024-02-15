@@ -1,7 +1,10 @@
 - hosts: all
-#  gather_facts: no
+  gather_facts: no
   become: yes
   tasks:
+    - name: gather facts
+      setup:
+
     - name: update APT packages
       apt:
         update_cache: yes
