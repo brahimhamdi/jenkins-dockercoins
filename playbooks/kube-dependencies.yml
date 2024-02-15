@@ -1,6 +1,5 @@
 - hosts: workers
   become: yes
-  gather_facts: no
   tasks:
     - name: add Docker apt-key
       get_url:
