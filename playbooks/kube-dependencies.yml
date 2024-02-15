@@ -135,7 +135,7 @@
         enabled: yes
         daemon-reload: yes
 
-- hosts: master
+- hosts: control
   become: yes
   tasks:
     - name: install Kubectl
