@@ -22,7 +22,7 @@
     - name: install Pod network
       become: yes
       become_user: vagrant
-      shell: kubectl apply -f files/kube-flannel.yml >> pod_network_setup.log
+      shell: kubectl apply -f playbooks/files/kube-flannel.yml >> pod_network_setup.log
       args:
         chdir: $HOME
         creates: pod_network_setup.log

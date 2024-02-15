@@ -2,5 +2,5 @@
   gather_facts: false
   tasks:
   - name: deploy Dockercoins
-    command: kubectl apply -f files/dockercoins.yaml
+    command: kubectl apply -f playbooks/files/dockercoins.yaml
 
