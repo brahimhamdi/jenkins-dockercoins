@@ -9,5 +9,5 @@
   - name: remove cluster
     command: kubeadm reset -f
   - name: remove configs
-    command: rm -rf /etc/kubernetes/ /var/lib/kubelet/ /var/lib/etcd/
+    command: rm -rf /etc/kubernetes/ /var/lib/kubelet/ /var/lib/etcd/ /etc/cni
 

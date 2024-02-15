@@ -48,9 +48,10 @@ pipeline {
 
     stage('Create k8s cluster') {
       steps{
+            sh 'ansible-playbook playbooks/remove-cluster.yml'
             sh 'ansible-playbook playbooks/kube-dependencies.yml'
             sh 'ansible-playbook playbooks/master.yml'
-            sh 'ansible-playbook playbooks/worker.yml'
+            sh 'ansible-playbook playbooks/workers.yml'
           }
         }
     
