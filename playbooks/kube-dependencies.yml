@@ -1,4 +1,5 @@
 - hosts: all
+  gather_facts: no
   become: yes
   tasks:
     - name: update APT packages
@@ -137,6 +138,7 @@
 
 - hosts: control
   become: yes
+  gather_facts: no
   tasks:
     - name: install Kubectl
       apt:
